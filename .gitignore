@@ -1,0 +1,36 @@
+# Model weights and binaries (never commit to Git; published via GitHub Releases)
+*.bin
+*.pt
+*.pth
+*.onnx
+*.safetensors
+models/v1/*.bin
+models/v2/*.bin
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# LaTeX build temporary files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/

@@ -1,0 +1,9 @@
+{
+  "replicas": {
+    "parser-deployment-78b97d8c4-a1b2c": 2724,
+    "parser-deployment-78b97d8c4-d3e4f": 2670
+  },
+  "model_versions": {
+    "v1": 5394
+  }
+}

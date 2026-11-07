@@ -1,0 +1,30 @@
+# Training configuration for Student Model (EleutherAI/pythia-70m)
+# Sequence-Level Knowledge Distillation
+
+# 1. Random seed for reproducibility
+seed: 42
+
+# 2. Optimization hyper-parameters
+learning_rate: 5.0e-4
+
+# 3. Batch size (optimized for CPU execution)
+batch_size: 8
+
+# 4. Number of training epochs
+epochs: 3
+
+# 5. Maximum sequence length
+max_seq_length: 128
+
+# 6. Library versions pinned for exact reproducibility
+library_versions:
+  torch: "2.2.2"
+  transformers: "4.39.3"
+  datasets: "2.18.0"
+  accelerate: "0.28.0"
+
+# Model paths and storage settings
+base_model_name: "EleutherAI/pythia-70m"
+train_data_path: "datasets/v1/train.jsonl"
+output_dir: "models/v1"
+loss_csv_path: "training/loss.csv"

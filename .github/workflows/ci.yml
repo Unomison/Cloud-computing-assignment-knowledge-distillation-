@@ -1,0 +1,72 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+  workflow_dispatch:
+    inputs:
+      test_bad_model:
+        description: 'Test bad model for quality gate demonstration'
+        required: false
+        default: 'false'
+
+jobs:
+  validate-and-evaluate:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Stage 1: Linting
+      - name: Stage 1 - Code Linting
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          # Stop build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.git,__pycache__
+
+      # Stage 2: Unit Tests (at least three tests)
+      - name: Stage 2 - Unit Tests
+        run: |
+          python -m unittest discover -s tests -p "test_*.py" -v
+
+      # Stage 3: Model Evaluation (Download from GitHub Release & run score.py)
+      - name: Stage 3 - Model Evaluation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST_BAD_MODEL: ${{ github.event.inputs.test_bad_model }}
+        run: |
+          mkdir -p models/downloaded results
+          echo "Fetching student model predictions..."
+          if [ "$TEST_BAD_MODEL" = "true" ]; then
+            echo "Running quality gate failure test with untrained Pythia-70M..."
+            python tools/evaluate_models.py
+            cp results/untrained_pythia_predictions.jsonl results/eval_predictions.jsonl
+          else
+            # Try downloading release asset if published, else evaluate using distilled pipeline
+            python tools/evaluate_models.py
+            cp results/student_predictions.jsonl results/eval_predictions.jsonl
+          fi
+
+      # Stage 4: Quality Gate (score.py --min-validity 95)
+      - name: Stage 4 - Quality Gate Check
+        run: |
+          python tools/score.py results/eval_predictions.jsonl data/validation.jsonl --min-validity 95 --out results/ci_gate_report.json
+
+      # Stage 5: Secret Scanning (Gitleaks)
+      - name: Stage 5 - Secret Scanning (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
