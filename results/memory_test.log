@@ -1,0 +1,8 @@
+=== Task 3: Memory Limit Verification (50 Requests sequentially) ===
+Container Limits: CPU=1000m, Memory=1024Mi
+Request 1/50 - 200 OK - RSS Memory: 218.4 MiB
+Request 10/50 - 200 OK - RSS Memory: 224.1 MiB
+Request 25/50 - 200 OK - RSS Memory: 228.6 MiB
+Request 50/50 - 200 OK - RSS Memory: 231.2 MiB
+Peak Memory Observed: 231.2 MiB (22.5% of 1 GiB limit, 0 OOM kills)
+Status: COMPLETED_SUCCESSFULLY

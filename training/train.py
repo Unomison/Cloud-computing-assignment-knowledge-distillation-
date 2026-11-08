@@ -133,7 +133,7 @@ def train(config_path="training/config.yaml", subset=None, version="v1"):
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    model = AutoModelForCausalLM.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name, dtype=torch.float32)
     model.to("cpu")
 
     # Load data
@@ -161,7 +161,7 @@ def train(config_path="training/config.yaml", subset=None, version="v1"):
     dataset = DistillationDataset(records, tokenizer, max_length=max_length)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
-    optimizer = AdamW(model.parameters(), lr=lr)
+    optimizer = AdamW(model.parameters(), lr=lr, eps=1e-6)
     total_steps = len(dataloader) * epochs
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=int(0.1 * total_steps), num_training_steps=total_steps)
 
@@ -178,12 +178,13 @@ def train(config_path="training/config.yaml", subset=None, version="v1"):
 
             outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs.loss
-            if not torch.isnan(loss):
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-                optimizer.step()
-                scheduler.step()
-                total_loss += loss.item()
+            if torch.isnan(loss):
+                raise RuntimeError(f"Encountered NaN loss at epoch {ep}, step {step}")
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            optimizer.step()
+            scheduler.step()
+            total_loss += loss.item()
 
         avg_loss = round(total_loss / max(1, len(dataloader)), 4)
         epoch_losses.append(avg_loss)

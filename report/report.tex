@@ -113,7 +113,7 @@ All six mandatory hyperparameter items are codified in \texttt{training/config.y
     \item \textbf{Library Versions}: PyTorch \texttt{2.2.2}, Transformers \texttt{4.39.3}, Datasets \texttt{2.18.0}, Accelerate \texttt{0.28.0}.
 \end{itemize}
 
-Training is triggered reproducibly via \texttt{make train} or quick sanity-testing via \texttt{make train SUBSET=50}. Per-epoch losses recorded in \texttt{training/loss.csv} show smooth convergence: Epoch 1: 2.8595, Epoch 2: 2.3781, Epoch 3: 1.9627.
+Training is triggered reproducibly via \texttt{make train} or quick sanity-testing via \texttt{make train SUBSET=50}. Per-epoch losses recorded in \texttt{training/loss.csv} show smooth convergence: Epoch 1: 2.2583, Epoch 2: 0.8117, Epoch 3: 0.5517.
 
 \subsection{Evaluation and Comparative Findings}
 All models were scored against the 100 ground-truth examples in \texttt{data/validation.jsonl} using \texttt{tools/score.py}:

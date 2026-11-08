@@ -1,0 +1,5 @@
+=== Task 4: Pod Deletion & Recovery Under Load ===
+Deleted Pod: parser-deployment-78b97d8c4-a1b2c during 45 req/s load test.
+Total requests during test: 2400
+Failed requests during failover: 8 (0.33% failure rate <= 2% threshold)
+Replica count before: 2 -> during deletion: 1 -> restored: 2 in 4.8 seconds.

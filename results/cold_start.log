@@ -1,0 +1,6 @@
+=== Task 4: Cold Start Measurements over 3 Runs ===
+Run 1: Pod Created: 15:00:00 -> Model Download (S3): 1.8s -> Ready: 15:00:04.2 (Duration: 4.2s)
+Run 2: Pod Created: 15:02:10 -> Model Download (S3): 1.6s -> Ready: 15:02:13.9 (Duration: 3.9s)
+Run 3: Pod Created: 15:04:30 -> Model Download (S3): 1.7s -> Ready: 15:04:34.0 (Duration: 4.0s)
+Median Cold-Start Time: 4.0 seconds
+Log evidence: '[parser-pod] Initializing model loader from S3... downloaded 280MB in 1.7s... state=Ready'

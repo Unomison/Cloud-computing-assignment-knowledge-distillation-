@@ -22,6 +22,7 @@ __pycache__/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+!results/*.log
 
 # OS specific files
 .DS_Store
@@ -34,4 +35,7 @@ desktop.ini
 env/
 venv/
 ENV/
+
+# Submission archives
+*.zip
 

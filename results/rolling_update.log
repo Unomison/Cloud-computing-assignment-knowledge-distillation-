@@ -1,0 +1,6 @@
+=== Task 4: Rolling Update (v1 -> v2 -> rollback v1) ===
+Updated image env MODEL_VERSION=v2, MODEL_URI=models/v2
+Load test active: 2700 requests served.
+Failed requests: 4 (0.15% failure rate <= 0.5% threshold)
+Executed: kubectl rollout undo deployment/parser-deployment -n app
+Verified X-Model-Version returned: 'v1' across all replicas.
