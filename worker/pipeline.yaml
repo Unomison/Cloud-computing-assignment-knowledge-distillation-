@@ -70,3 +70,4 @@ spec:
         - name: shared-data
           persistentVolumeClaim:
             claimName: shared-pipeline-pvc
+

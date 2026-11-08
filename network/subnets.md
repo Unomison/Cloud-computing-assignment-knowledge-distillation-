@@ -78,3 +78,4 @@ Consequently:
 NACLs process rules in numerical order, starting from the **lowest rule number upward**, and operate on a **first-match-wins** principle. Once a packet matches all attributes of a rule, that rule's action (`allow` or `deny`) is immediately executed, and all subsequent rules are ignored.
 
 In this architecture, rule 100 explicitly **denies** all traffic from the abusive range `198.51.100.0/24`, while rule 200 and rule 210 **allow** inbound TCP traffic on ports 80 and 443 from `0.0.0.0/0` (anywhere). Because `198.51.100.0/24` is a subset of `0.0.0.0/0`, placing the deny rule at a lower number (100 < 200) ensures that packets originating from the abusive range are intercepted and dropped before the broader allow rule (`0.0.0.0/0`) is ever evaluated. If the deny rule had a higher rule number than 200/210 (e.g., rule 350), an abusive packet targeting port 80 or 443 would match rule 200/210 first and be permitted, rendering the security block ineffective.
+

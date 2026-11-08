@@ -29,3 +29,4 @@ RUN useradd -m -u 1000 appuser && chown -R appuser /app
 USER appuser
 
 CMD ["python", "app.py"]
+

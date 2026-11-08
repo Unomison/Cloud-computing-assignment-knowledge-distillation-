@@ -78,3 +78,4 @@ type: Opaque
 stringData:
   AWS_ACCESS_KEY_ID: "anykey"
   AWS_SECRET_ACCESS_KEY: "anysecret"
+

@@ -28,3 +28,4 @@ base_model_name: "EleutherAI/pythia-70m"
 train_data_path: "datasets/v1/train.jsonl"
 output_dir: "models/v1"
 loss_csv_path: "training/loss.csv"
+
