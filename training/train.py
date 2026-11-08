@@ -15,10 +15,10 @@ import yaml
 try:
     import torch
     from torch.utils.data import Dataset, DataLoader
+    from torch.optim import AdamW
     from transformers import (
         AutoTokenizer,
         AutoModelForCausalLM,
-        AdamW,
         get_linear_schedule_with_warmup,
         set_seed
     )

@@ -18,10 +18,10 @@ max_seq_length: 128
 
 # 6. Library versions pinned for exact reproducibility
 library_versions:
-  torch: "2.2.2"
-  transformers: "4.39.3"
+  torch: "2.15.0+cpu"
+  transformers: "5.22.2"
+  accelerate: "1.15.0"
   datasets: "2.18.0"
-  accelerate: "0.28.0"
 
 # Model paths and storage settings
 base_model_name: "EleutherAI/pythia-70m"

@@ -3,7 +3,7 @@
 **Student Name:** UTKARSH SINGH  
 **Roll Number:** 230101079  
 **Course:** Cloud Computing (CS3081) Mini Project  
-**Repository:** https://github.com/Unomison/cloud-computing-assignment  
+**Repository:** https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-  
 
 ---
 

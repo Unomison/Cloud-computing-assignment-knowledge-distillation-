@@ -2,8 +2,8 @@
 
 **Student Name:** UTKARSH SINGH  
 **Roll Number:** 230101079  
-**GitHub Repository:** [https://github.com/Unomison/cloud-computing-assignment](https://github.com/Unomison/cloud-computing-assignment)  
-**Latest Release Assets:** [GitHub Releases v1.0.0](https://github.com/Unomison/cloud-computing-assignment/releases/tag/v1.0.0)  
+**GitHub Repository:** [https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-](https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-)  
+**Latest Release Assets:** [GitHub Releases v1.0.0](https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-/releases/tag/v1.0.0)  
 
 ---
 
@@ -198,8 +198,8 @@ make down
 
 ## 6. GitHub Repository & Releases
 
-- **GitHub Repository:** [https://github.com/Unomison/cloud-computing-assignment](https://github.com/Unomison/cloud-computing-assignment)
+- **GitHub Repository:** [https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-](https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-)
 - **CI/CD Quality Gate Demonstration:**
-  - Passing CI Run: [Actions Run #1](https://github.com/Unomison/cloud-computing-assignment/actions)
-  - Gate Failure Demonstration (Untrained Pythia-70M): [Actions Run #2 (Failed at Quality Gate)](https://github.com/Unomison/cloud-computing-assignment/actions)
+  - Passing CI Run: [Actions Run #1](https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-/actions)
+  - Gate Failure Demonstration (Untrained Pythia-70M): [Actions Run #2 (Failed at Quality Gate)](https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-/actions)
 - **Submission Commit Tag:** `final`
