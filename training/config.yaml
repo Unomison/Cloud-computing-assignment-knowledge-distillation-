@@ -5,7 +5,7 @@
 seed: 42
 
 # 2. Optimization hyper-parameters
-learning_rate: 5.0e-4
+learning_rate: 5.0e-5
 
 # 3. Batch size (optimized for CPU execution)
 batch_size: 8

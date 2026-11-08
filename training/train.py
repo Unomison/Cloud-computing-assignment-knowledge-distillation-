@@ -178,11 +178,12 @@ def train(config_path="training/config.yaml", subset=None, version="v1"):
 
             outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs.loss
-            loss.backward()
-            optimizer.step()
-            scheduler.step()
-
-            total_loss += loss.item()
+            if not torch.isnan(loss):
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                optimizer.step()
+                scheduler.step()
+                total_loss += loss.item()
 
         avg_loss = round(total_loss / max(1, len(dataloader)), 4)
         epoch_losses.append(avg_loss)
