@@ -1,8 +1,10 @@
+\PassOptionsToPackage{hyphens}{url}
 \documentclass[10pt,a4paper]{article}
 \usepackage[margin=0.85in]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{url}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -31,7 +33,9 @@
 
 \title{\vspace{-1.5cm}\textbf{\Large Cloud Computing (CS3081): Mini Project Technical Report}\\
 \large Knowledge Distillation and Deployment of a Lightweight Command-Parsing Language Model on a Local Cloud}
-\author{\textbf{Utkarsh Singh} \quad$|$ \quad Roll Number: \texttt{230101079} \quad$|$ \quad Department of Computer Science \& Engineering \\ GitHub Repository: \url{https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-}}
+\author{\textbf{Utkarsh Singh} \quad$|$ \quad Roll Number: \texttt{230101079} \\
+Department of Computer Science \& Engineering \\[3pt]
+\footnotesize GitHub Repository: \href{https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-}{\texttt{https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-}}}
 \date{\vspace{-0.5cm}\small November 2026}
 
 \begin{document}
@@ -46,7 +50,7 @@
 \section{Task 1: Object Storage and Parallel Teacher Labelling}
 
 \subsection{Architecture and Storage Setup}
-A multi-namespace local Kubernetes cluster was deployed on k3d using the declarative specification in \texttt{cluster/k3d.yaml}. For scalable S3-compatible object storage, SeaweedFS was deployed in the \texttt{data} namespace with a dedicated persistent volume claim and an internal ClusterIP service (\texttt{seaweedfs-s3.data.svc.cluster.local:8333}). Two distinct object storage buckets were initialized:
+A multi-namespace local Kubernetes cluster was deployed on k3d using the declarative specification in \texttt{cluster/k3d.yaml}. For scalable S3-compatible object storage, SeaweedFS was deployed in the \texttt{data} namespace with a dedicated persistent volume claim and an internal ClusterIP service (\texttt{seaweedfs-s3.\allowbreak data.\allowbreak svc.\allowbreak cluster.\allowbreak local:8333}). Two distinct object storage buckets were initialized:
 \begin{itemize}\setlength\itemsep{0em}
     \item \texttt{datasets}: Hosts raw command corpora (\texttt{commands\_pool.jsonl}), distributed teacher shard outputs (\texttt{datasets/teacher/}), and the cleaned training dataset (\texttt{datasets/v1/train.jsonl}).
     \item \texttt{models}: Stores trained student model artifacts, tokenizers, and SHA-256 verification manifests across deployment versions (\texttt{models/v1/} and \texttt{models/v2/}).
@@ -91,7 +95,8 @@ Total Input Records & 3,000 & 100.00\% \\
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Integrity Check}: $\text{Input} = (a) + (b) + (c) + (d) + (e) + \text{Kept} = 14 + 10 + 9 + 14 + 47 + 2906 = 3000$ (Verified True). The SHA-256 checksum is \texttt{cce578baad03646ee65e9a72f0c039da795b21c842840d752055e17a477c230c}, recorded in \texttt{datasets/v1/train.sha256}.
+\noindent\textbf{Integrity Check}: $\text{Input} = (a) + (b) + (c) + (d) + (e) + \text{Kept} = 14 + 10 + 9 + 14 + 47 + 2906 = 3000$ (Verified True). The SHA-256 checksum recorded in \texttt{datasets/v1/train.sha256} is:\\
+\centerline{\footnotesize\texttt{cce578baad03646ee65e9a72f0c039da795b21c842840d752055e17a477c230c}}
 
 \section{Task 2: Training the Student (Sequence-Level Distillation)}
 
@@ -116,7 +121,7 @@ All six mandatory hyperparameter items are codified in \texttt{training/config.y
 Training is triggered reproducibly via \texttt{make train} or quick sanity-testing via \texttt{make train SUBSET=50}. Per-epoch losses recorded in \texttt{training/loss.csv} show smooth convergence: Epoch 1: 2.2583, Epoch 2: 0.8117, Epoch 3: 0.5517.
 
 \subsection{Evaluation and Comparative Findings}
-All models were scored against the 100 ground-truth examples in \texttt{data/validation.jsonl} using \texttt{tools/score.py}:
+All models were evaluated against the 100 ground-truth examples in \texttt{data/validation.jsonl} using \texttt{score.py}:
 
 \begin{table}[h!]
 \centering
@@ -168,7 +173,7 @@ The web inference service is implemented in \texttt{service/app.py} listening on
 \end{itemize}
 
 \subsection{Container Optimization and Memory Verification}
-To ensure the container remains strictly under 2 GB, \texttt{service/Dockerfile} builds on \texttt{python:3.11-slim} and fetches PyTorch directly from the CPU-only index (\texttt{torch==2.2.2+cpu}), completely eliminating CUDA/cuDNN binaries. The resulting image size is \textbf{1.04 GB} ($\approx 52\%$ of the limit).
+To ensure the container remains strictly under 2 GB, \texttt{service/Dockerfile} builds on \texttt{python:3.11-slim} and fetches CPU-only PyTorch (\texttt{torch==2.2.2+cpu}), eliminating all CUDA/cuDNN binaries. The resulting image size is \textbf{1.04 GB} ($\approx 52\%$ of the limit).
 \begin{itemize}\setlength\itemsep{0em}
     \item Test: 50 sequential POST requests to \texttt{/parse} under limits (1 CPU, 1 GiB RAM).
     \item Baseline RSS Memory: 218.4 MiB; Peak RSS Memory: \textbf{231.2 MiB} (22.5\% of 1 GiB limit).
@@ -191,7 +196,7 @@ All manifests are organized under \texttt{manifests/app.yaml} deploying to the \
 \centering
 \small
 \caption{Kubernetes Operational Resilience Verification}
-\begin{tabular}{lllr}
+\begin{tabularx}{\textwidth}{l X l r}
 \toprule
 \textbf{Operational Test} & \textbf{Observed Behavior} & \textbf{Threshold} & \textbf{Status} \\
 \midrule
@@ -202,7 +207,7 @@ Pod Recovery & Deleted active pod during 45 req/s; 8 errors (0.33\%) & Max: 2.0\
 Cold-Start Time & 3 runs: 4.2s, 3.9s, 4.0s (Median: \textbf{4.0s}) & S3 download verified & Passed \\
 Load Balancing Split & Pod A: 2,724 (50.5\%), Pod B: 2,670 (49.5\%) & $\ge 30\%$ each & Passed \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \noindent\textbf{Local Cluster Limitation}: The k3d cluster executes as Docker containers on a single physical host laptop. While it exercises real Kubernetes API controllers, cgroups, network namespaces, and Traefik routing, it provides no hardware fault tolerance: host OS restarts, kernel panics, or machine power loss terminate the entire cluster simultaneously.
@@ -216,7 +221,7 @@ Subnets were allocated sequentially from largest host requirement to smallest, s
 \centering
 \small
 \caption{Complete IPv4 Subnet Allocation Table}
-\begin{tabularx}{\textwidth}{lccccc}
+\begin{tabularx}{\textwidth}{l c c >{\centering\arraybackslash}X c r}
 \toprule
 \textbf{Subnet Name} & \textbf{Network Address} & \textbf{Prefix} & \textbf{Usable Host Range} & \textbf{Broadcast Address} & \textbf{Usable Hosts} \\
 \midrule
@@ -235,9 +240,9 @@ The public subnet NACL (\texttt{network/nacl.json}) enforces stateless ingress a
 \centering
 \small
 \caption{Public Subnet NACL Rule Table (\texttt{network/nacl.json})}
-\begin{tabular}{lllllll}
+\begin{tabularx}{\textwidth}{l c c c c c X}
 \toprule
-\textbf{Dir} & \textbf{Rule} & \textbf{Protocol} & \textbf{Port Range} & \textbf{CIDR} & \textbf{Action} & \textbf{Description} \\
+\textbf{Dir} & \textbf{Rule} & \textbf{Proto} & \textbf{Port Range} & \textbf{CIDR} & \textbf{Action} & \textbf{Description} \\
 \midrule
 Inbound & 100 & ALL & Any & \texttt{198.51.100.0/24} & DENY & Block abusive subnet \\
 Inbound & 200 & TCP & 80 & \texttt{0.0.0.0/0} & ALLOW & Public HTTP traffic \\
@@ -248,7 +253,7 @@ Inbound & 400 & TCP & 1024--65535 & \texttt{10.20.0.0/22} & ALLOW & App server r
 Outbound & 100 & TCP & 8000 & \texttt{10.20.0.0/22} & ALLOW & Forward to app backend \\
 Outbound & 200 & TCP & 1024--65535 & \texttt{0.0.0.0/0} & ALLOW & Return replies to clients \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \noindent\textbf{Stateless Reply Traffic}: NACLs lack connection state tracking. Unlike stateful firewalls which automatically associate reply packets with active connections, a stateless NACL evaluates every packet independently. When external clients query port 80/443, responses must be explicitly permitted through outbound rule 200 to client ephemeral ports (1024--65535). Similarly, backend responses from the app subnet returning to the load balancer must be explicitly permitted by inbound rule 400.
@@ -271,7 +276,7 @@ The GitHub Actions workflow (\texttt{.github/workflows/ci.yml}) executes 5 seque
     \item \textbf{Linting}: Flake8 checks syntax, unassigned variables, and formatting.
     \item \textbf{Unit Tests}: Runs 4 automated test suites covering valid schema validation, rejected keys/intents, command extraction, and NACL packet decisions.
     \item \textbf{Model Evaluation}: Fetches student model release assets and computes validation scores.
-    \item \textbf{Quality Gate}: Enforces \texttt{python tools/score.py predictions.jsonl data/validation.jsonl --min-validity 95}. Deliberately running an untrained base model fails with exit code 1 (\texttt{json\_validity 0.0 < 95.0}), confirming gate efficacy (Workflow run link documented in README).
+    \item \textbf{Quality Gate}: Enforces validation via \texttt{score.py --min-validity 95}. Deliberately running an untrained base model fails with exit code 1 (\texttt{json\_validity 0.0 < 95.0}), confirming gate efficacy (Workflow run link documented in README).
     \item \textbf{Secret Scanning}: Gitleaks scans commit history and reports 0 leaks.
 \end{enumerate}
 
@@ -320,9 +325,9 @@ Based on the hypothetical pricing in \texttt{data/rate\_card.json}:
 \footnotesize
 \centering
 \caption{System Evaluation, Limitations, and Proposed Improvements}
-\begin{tabularx}{\textwidth}{l p{2.8cm} p{4.6cm} p{4.6cm}}
+\begin{tabularx}{\textwidth}{l p{2.6cm} X X}
 \toprule
-\textbf{Component / Concern} & \textbf{Evidence (Measured)} & \textbf{Limitation Found} & \textbf{Improvement Proposed} \\
+\textbf{Component} & \textbf{Evidence (Measured)} & \textbf{Limitation Found} & \textbf{Improvement Proposed} \\
 \midrule
 Data and storage & 2,906 clean records; 47 duplicates & Sharded workers require shared filesystem or external S3 coordination & Implement an SQS/RabbitMQ message queue for dynamic chunk leasing \\
 Model quality & 99.0\% JSON validity; 96.0\% full-frame & Pythia-70M struggles with multi-intent or implicit dates & Fine-tune Pythia-160M or incorporate token-level distillation loss \\

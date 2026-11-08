@@ -1,7 +1,9 @@
+\PassOptionsToPackage{hyphens}{url}
 \documentclass[10pt,a4paper]{article}
 \usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{fancyhdr}
+\usepackage{url}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{microtype}
@@ -30,7 +32,7 @@
 \textbf{Student Name:} Utkarsh Singh \hfill \textbf{Roll Number:} \texttt{230101079}\\
 \textbf{Course:} Cloud Computing (CS3081) \hfill \textbf{Date:} November 2026\\
 \textbf{Project:} Knowledge Distillation \& Microservice Cloud Deployment\\
-\textbf{GitHub Repository Link:} \url{https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-}
+\textbf{GitHub Link:} \href{https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-}{\footnotesize\texttt{https://github.com/Unomison/Cloud-computing-assignment-knowledge-distillation-}}
 \end{tcolorbox}
 
 \vspace{0.1cm}
@@ -72,7 +74,7 @@ By dissecting the TCP three-way handshake and packet flow through the public loa
 \end{itemize}
 
 \subsection*{Container Lean Optimization and PyTorch Footprint Reduction}
-A standard Docker build including PyTorch typically bloats beyond 4.5 GB due to bundled NVIDIA CUDA and cuDNN libraries. Because inference runs purely on CPU, I customized the multi-stage build using \texttt{python:3.11-slim} and explicitly installed the CPU-only distribution (\texttt{--index-url https://download.pytorch.org/whl/cpu}). This compressed the container image to just \textbf{1.04 GB}, comfortably below the assignment's strict 2 GB ceiling.
+A standard Docker build including PyTorch typically bloats beyond 4.5 GB due to bundled NVIDIA CUDA and cuDNN libraries. Because inference runs purely on CPU, I customized the multi-stage build using \texttt{python:3.11-slim} and explicitly installed the CPU-only distribution using PyTorch's official CPU wheel index. This compressed the container image to just \textbf{1.04 GB}, comfortably below the assignment's strict 2 GB ceiling.
 
 \section*{4. Key Empirical Observations \& Findings}
 
