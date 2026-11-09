@@ -91,7 +91,7 @@ def train(config_path="training/config.yaml", subset=None, version="v1"):
     train_data_path = cfg.get("train_data_path", "datasets/v1/train.jsonl")
 
     output_dir = f"models/{version}"
-    loss_csv_path = cfg.get("loss_csv_path", "training/loss.csv")
+    loss_csv_path = cfg.get("loss_csv_path", "training/loss.csv") if version == "v1" else f"{output_dir}/loss.csv"
     if version == "v2":
         epochs += 1  # version 2 trains for 1 more epoch
         seed += 1
